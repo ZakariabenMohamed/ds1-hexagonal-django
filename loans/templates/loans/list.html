@@ -1,0 +1,27 @@
+{% extends "loans/base.html" %}
+{% block title %}Historique{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Historique des demandes</h1>
+  {% if applications %}
+  <table>
+    <thead><tr><th>#</th><th>Demandeur</th><th>Montant (TND)</th><th>Durée</th><th>Décision</th></tr></thead>
+    <tbody>
+    {% for a in applications %}
+      <tr>
+        <td><a href="{% url 'loans:detail' a.id %}">{{ a.id }}</a></td>
+        <td>{{ a.applicant.name }}</td>
+        <td>{{ a.request.amount }}</td>
+        <td>{{ a.request.duration_months }} mois</td>
+        <td><span class="badge {{ a.decision.status.value }}">
+          {% if a.decision.status.value == "APPROVED" %}Accepté{% elif a.decision.status.value == "REJECTED" %}Refusé{% else %}À examiner{% endif %}
+        </span></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">Aucune demande. Créez-en une, ou lancez <code>python manage.py seed_demo</code>.</p>
+  {% endif %}
+</div>
+{% endblock %}

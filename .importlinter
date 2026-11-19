@@ -1,0 +1,34 @@
+[importlinter]
+root_packages =
+    loan_core
+    loan_adapters
+    loans
+include_external_packages = True
+
+[importlinter:contract:core-no-framework]
+name = Core must not depend on Django or on outer layers
+type = forbidden
+source_modules =
+    loan_core
+forbidden_modules =
+    django
+    loan_adapters
+    loans
+
+[importlinter:contract:adapters-no-django]
+name = Pure adapters must not depend on Django
+type = forbidden
+source_modules =
+    loan_adapters
+forbidden_modules =
+    django
+    loans
+
+[importlinter:contract:layers]
+name = Layered architecture (dependencies point inwards)
+type = layers
+layers =
+    loans
+    loan_adapters
+    loan_core.application
+    loan_core.domain

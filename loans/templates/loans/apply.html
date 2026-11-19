@@ -1,0 +1,18 @@
+{% extends "loans/base.html" %}
+{% block title %}Nouvelle demande{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Nouvelle demande de prêt</h1>
+  <p class="muted">Les règles de décision sont appliquées par le cœur Python, pas par cette page. Le score de crédit est simulé.</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    <button type="submit">Évaluer la demande</button>
+  </form>
+</div>
+{% endblock %}

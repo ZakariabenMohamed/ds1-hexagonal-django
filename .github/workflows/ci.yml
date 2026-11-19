@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Architecture rules (import-linter)
+        run: lint-imports
+      - name: Django system check and migrations
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+      - name: Tests
+        run: pytest
+      - name: Core speed gate (50+ tests, < 0.2 s, no Django)
+        run: python scripts/check_core_speed.py
+        env:
+          CORE_MAX_SECONDS: "0.5"  # runners partagés : marge CI ; en local la limite reste 0.2

@@ -1,0 +1,4 @@
+Django>=5.2,<5.3
+pytest>=8
+pytest-django>=4.9
+import-linter>=2.3

@@ -1,0 +1,24 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_DB_NAME: /data/db.sqlite3
+    volumes:
+      - dbdata:/data
+
+  # Vérifications : docker compose run --rm check
+  check:
+    build: .
+    profiles: ["check"]
+    environment:
+      DJANGO_DB_NAME: /tmp/check.sqlite3
+    command: >
+      sh -c "python manage.py check &&
+             lint-imports &&
+             pytest &&
+             python scripts/check_core_speed.py"
+
+volumes:
+  dbdata:

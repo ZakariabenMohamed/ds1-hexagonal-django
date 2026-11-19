@@ -1,0 +1,32 @@
+{% extends "loans/base.html" %}
+{% block title %}Demande #{{ application.id }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Demande #{{ application.id }}
+    <span class="badge {{ application.decision.status.value }}">
+      {% if application.decision.status.value == "APPROVED" %}Accepté
+      {% elif application.decision.status.value == "REJECTED" %}Refusé
+      {% else %}À examiner{% endif %}
+    </span>
+  </h1>
+  <dl>
+    <dt>Demandeur</dt><dd>{{ application.applicant.name }} ({{ application.applicant.reference }})</dd>
+    <dt>Montant</dt><dd>{{ application.request.amount }} TND sur {{ application.request.duration_months }} mois</dd>
+    <dt>Revenu mensuel</dt><dd>{{ application.request.monthly_income }} TND</dd>
+    <dt>Score de crédit (simulé)</dt><dd>{% if application.credit_score is None %}indisponible{% else %}{{ application.credit_score }}{% endif %}</dd>
+    <dt>Mensualité</dt><dd>{{ application.decision.monthly_payment }} TND</dd>
+    <dt>Taux d'endettement</dt><dd>{{ debt_ratio_percent }} %</dd>
+    <dt>Enregistrée le</dt><dd>{{ application.created_at|date:"d/m/Y H:i" }}</dd>
+  </dl>
+  <h2 style="font-size:1.1rem;margin-top:22px">Raisons de la décision</h2>
+  <ul>{% for reason in application.decision.reasons %}<li>{{ reason }}</li>{% endfor %}</ul>
+
+  <h2 style="font-size:1.1rem;margin-top:22px">Mémo de crédit</h2>
+  <p>{{ memo.text }}</p>
+  <p class="muted">
+    {% if memo.source == "assistant" %}Rédigé par l'assistant (simulé), validé par les règles déterministes.
+    {% else %}Mémo de référence généré par le domaine : le brouillon de l'assistant a été écarté.{% endif %}
+    {% if memo.issues %}<br>Problèmes détectés : {{ memo.issues|join:" · " }}{% endif %}
+  </p>
+</div>
+{% endblock %}
