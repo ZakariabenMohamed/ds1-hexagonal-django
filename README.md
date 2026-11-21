@@ -85,6 +85,15 @@ docker compose run --rm web python manage.py seed_demo   :: 6 demandes d'exemple
 docker compose down                                :: arrêt (la base est conservée dans un volume)
 ```
 
+La vérification de vitesse du cœur exige 0,2 s par défaut (valeur de la fiche du sujet). Sur un PC plus lent, on peut assouplir la limite avec une variable, sans modifier le code :
+
+```bat
+set CORE_MAX_SECONDS=0.5     :: invite de commandes (cmd)
+docker-check.bat
+```
+
+Sous PowerShell : `$env:CORE_MAX_SECONDS="0.5"`, puis `docker-check.bat`. Les durées dépendent de la machine : voir `docs/RESULTATS.md`.
+
 ## Vérifications
 
 ```bat
@@ -139,9 +148,9 @@ demande : elle passe en « À examiner » avec le message « Score de crédit in
 
 ## Captures d'écran
 
-`docs/screenshots/` contient des captures de l'interface, générées dans l'environnement de développement.
-**Pour le rendu, refaites vos propres captures sur votre machine** (interface, `pytest`, `lint-imports`,
-`demo_violation.py`, `benchmark.py`).
+`docs/screenshots/` contient les captures de la démonstration (interface, API, `docker-check.bat`, `pytest`,
+`lint-imports`, `demo_violation.py`, `benchmark.py`, scoring en panne, CI GitHub).
+Les mesures et leurs conditions (machine, limite de vitesse utilisée) sont dans `docs/RESULTATS.md`.
 
 ## Limites connues
 
